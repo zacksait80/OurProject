@@ -1,0 +1,124 @@
+protected override void WndProc(ref Message m)
+{
+    switch (m.Msg)
+    {
+        case 0x84:
+            base.WndProc(ref m);
+            if ((int) m.Result == 0x1)
+                m.Result = (IntPtr)0x2;
+            return;
+    }
+    base.WndProc(ref m);
+}
+
+private void btnshow_Click(object sender, EventArgs e)
+{
+    if (txtPassword.PasswordChar == '*')
+    {
+        hidebtn.BringToFront();
+        txtPassword.PasswordChar = '\0';
+    }
+}
+
+private void hidebtn_Click(object sender, EventArgs e)
+{
+    if (txtPassword.PasswordChar == '\0')
+    {
+       btnshow.BringToFront();
+        txtPassword.PasswordChar = '*';
+    }
+}
+
+
+
+
+ public partial class login : Form
+ {
+     // username display
+     public static string username;
+     static MySqlConnection conn = null;
+     public login()
+        
+     {
+         InitializeComponent();
+         Connection();
+     }
+
+
+
+     static void Connection()
+     {
+         string connStr = "server=127.0.0.1;user=root;database=doctorappointmentsystem;password=";
+         try
+         {
+             conn = new MySqlConnection(connStr);
+             conn.Open();
+         }
+         catch (Exception ex)
+         {
+             MessageBox.Show(ex.Message);
+         }
+         finally 
+         {
+             conn.Close(); 
+         }
+
+     }
+     public void loginValidation()
+     {
+         string userName = txtName.Text;
+         string password = txtPassword.Text;
+         try
+         {
+             conn.Open();
+             MySqlCommand mySqlCommand = new MySqlCommand("select * from users", conn);
+             MySqlDataReader reader = mySqlCommand.ExecuteReader();
+             while (reader.Read())
+             {
+                 if (userName == reader.GetString("username") && password == reader.GetString("password"))
+                 {
+                     conn.Close();
+                     return;
+                 }
+                 else if (userName == reader.GetString("username") || password == reader.GetString("password"))
+                 {
+                     txtName.Text = "";
+                     txtPassword.Text = "";
+                     conn.Close();
+                     return;
+                 }
+                 username = txtName.Text;
+             }
+         }
+         catch (Exception ex)
+         {
+             MessageBox.Show(ex.Message);
+             conn.Close();
+         }
+         
+     }
+     
+
+     private void btnLogin_Click(object sender, EventArgs e)
+     {
+         // if textboxes are empty display stop message
+         if (txtName.Text == "" || txtPassword.Text == "")
+         {
+             MessageBox.Show("Empty Username or Password", "EMPTY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         }
+         else
+         {
+
+
+             
+             //go to dashboard or form you want
+             loginValidation();
+             this.Hide();
+             Dashboard das = new Dashboard();
+             das.ShowDialog();
+         
+
+
+
+         }
+           

@@ -1,0 +1,59 @@
+create database Group_D
+
+use Group_D
+--1
+create table Users
+(
+us_no int primary key identity(1,1),
+us_name varchar(50),
+us_phone varchar(50),
+us_Email varchar(50),
+us_type varchar(20),
+us_Password varchar(50)
+)
+--2
+create table accounts
+(
+	acc_no int not null primary key identity,
+	acc_name varchar(40) not null,
+	institution varchar(50) not null,
+	balance decimal not null,
+	index index_accounts(acc_no)
+)
+
+--3
+create table Specialization
+(
+	sp_no int not null primary key identity,
+	sp_name varchar(40) not null,
+)
+
+==insert into Specialization values('indhaha')
+--select * from Specialization
+--4
+create table Doctors
+(
+	doc_no int not null primary key identity,
+	doc_name varchar(40) not null,
+	doc_email varchar(50) not null,
+	tell varchar(50) not null,
+	sex varchar(10) not null,
+	doc_spical varchar(59),
+	doc_time varchar(29) not null,
+	doc_exp varchar(50),
+	index index_doctor(doc_no),
+)
+
+--5
+
+  create table Appointment
+(
+	app_no int not null primary key identity,
+	pt_no int not null,
+	doc_name varchar(50) not null,
+	card_no int,
+	app_date datetime not null,
+	index index_appointment(app_no)
+)
+select * from Appointment
+

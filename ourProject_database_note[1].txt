@@ -1,0 +1,87 @@
+1.
+use Our_Project; 
+create table accounts
+(
+	acc_no int not null primary key identity,
+	acc_name varchar(40) not null,
+	institution varchar(50) not null,
+	balance decimal not null,
+	index index_accounts(acc_no)
+)
+2.
+create table Specialization
+(
+	sp_no int not null primary key identity,
+	sp_name varchar(40) not null,
+	index index_accounts(acc_no)
+)
+3.
+create table Doctors
+(
+	doc_no int not null primary key identity,
+	sp_no int not null,
+	doc_name varchar(40) not null,
+	tell varchar(50) not null,
+	sex varchar(10) not null,
+	index index_doctor(doc_no),
+	constraint sp_no_fk foreign key(sp_no) references Specialization(sp_no) on update cascade on delete cascade
+)
+4.
+create table Patient
+(
+	pt_no int not null primary key identity,
+	pt_name varchar(40) not null,
+	tell varchar(50) not null,
+	sex varchar(10) not null,
+	birth_date date not null,
+	index index_patient(pt_no)
+)
+5.
+create table Appointment
+(
+	app_no int not null primary key identity,
+	pt_no int not null,
+	doc_no int not null,
+	app_date datetime not null,
+	index index_appointment(app_no)
+)
+6.
+create table Reciepts
+(
+	re_no int not null primary key identity,
+	pt_no int not null,
+	acc_no int not null,
+	amount decimal not null,
+	re_date datetime not null,
+	description text not null,
+	index index_reciept(re_no),
+	constraint pt_no_fk foreign key(pt_no) references Patient(pt_no) on update cascade on delete cascade,
+	constraint acc_no_fk foreign key(acc_no) references accounts(acc_no) on update cascade on delete cascade
+)
+7.
+create table Status
+(
+	st_no int not null primary key identity,
+	st_name varchar(30) not null,
+	index index_status(st_no),
+)
+8.
+create table Approval
+(
+	appr_no int not null primary key identity,
+	st_no int not null,
+	re_no int not null,
+	appr_date datetime not null,
+	description text not null,
+	index index_approval(appr_no),
+	constraint st_no_fk foreign key(st_no) references Status(st_no) on update cascade on delete cascade,
+	constraint re_no_fk foreign key(re_no) references Reciept(re_no) on update cascade on delete cascade
+)
+9.
+create table Users
+(
+	us_no int not null primary key identity,
+	us_name varchar(30) not null,
+	us_password varchar(50) not null,
+	index index_users(us_no)
+)
